@@ -8,9 +8,10 @@ from kivy.uix.textinput import TextInput
 
 class Application(App):
     def build(self):
+        self.float = False
         layout = GridLayout(cols=2)
 
-        layout.add_widget(Label(text="First Number"))
+        layout.add_widget(Label(text="First Number", ))
         self.firstNumberInput = TextInput(multiline=False)
         layout.add_widget(self.firstNumberInput)
 
@@ -37,35 +38,82 @@ class Application(App):
         self.DivButton.bind(on_press=self.div)
         layout.add_widget(self.DivButton)
         self.resultLabel = Label(text="")
+
+
+        self.powerButton = Button(text="Power")
+        self.powerButton.bind(on_press=self.power)
+        layout.add_widget(self.powerButton)
+        self.resultLabel=Label(text="")
+
+        self.rootButton = Button(text="Root")
+        self.rootButton.bind(on_press=self.rooted)
+        layout.add_widget(self.rootButton)
+        self.resultLabel=Label(text="")
+
+
         layout.add_widget(self.resultLabel)
-
-
+        self.ErrorMessage=Label(text="")
+        layout.add_widget(self.ErrorMessage)
         return layout
 
 
     def handle_click(self, instance):
-        result = self.get_first_number() * self.get_second_number()
-        self.resultLabel.text = "Result: " + str(result)
+        if self.valid():
+            self.float = True
+            result = self.get_first_number() * self.get_second_number()
+            self.resultLabel.text = "Result: " + str(result)
     
     def add(self, instance):
-        result = self.get_first_number() + self.get_second_number()
-        self.resultLabel.text = "Result: " + str(result)
+        if self.valid():
+            self.float = True
+            result = self.get_first_number() + self.get_second_number()
+            self.resultLabel.text = "Result: " + str(result)
     
     def sub(self, instance):
-        result = self.get_first_number() - self.get_second_number()
-        self.resultLabel.text = "Result: " + str(result)
+        if self.valid():
+            self.float = True
+            result = self.get_first_number() - self.get_second_number()
+            self.resultLabel.text = "Result: " + str(result)
 
     def div(self, instance):
-        result = self.get_first_number() / self.get_second_number()
-        self.resultLabel.text = "Result: " + str(result)
+        if self.valid():
+            self.float = True
+            result = self.get_first_number() / self.get_second_number()
+            self.resultLabel.text = "Result: " + str(result)
+    
+    def power(self, instance):
+        if self.valid():
+            self.float = False
+            result= self.get_first_number() ** self.get_second_number()
+            self.resultLabel.text = "Result: " + str(result)
+    
+    def rooted(self, instance):
+        if self.valid():
+            self.float = False
+            result = self.get_first_number() ** (1/self.get_second_number())
+            self.resultLabel.text = "Result: " + str(result)
 
     def get_first_number(self):
-        return float(self.firstNumberInput.text)
-
+        if self.float == True:
+            return float(self.firstNumberInput.text)
+        else:
+            return int(self.firstNumberInput.text)
     def get_second_number(self):
-        return float(self.secondNumberInput.text)
-    
-    
+        if self.float == True:
+            return float(self.secondNumberInput.text)
+        else:
+            return int(self.secondNumberInput.text)
+
+    def valid(self):
+        if self.get_first_number() != None and self.get_second_number() != None:
+            if self.get_first_number() != 0 and self.get_second_number() != 0:
+                return True
+            else:
+                self.ErrorMessage.text = "Error, Enter a number more than zero"
+        else:
+            self.ErrorMessage.text = "Error, please enter 2 numbers"
+        
+        return False
 
 if __name__ == "__main__":
     myApp = Application()
