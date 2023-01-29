@@ -12,6 +12,8 @@
 <PongPaddle>:
     size: 25, 200
     canvas:
+        Color:
+            rgba: self.Color
         Rectangle:
             pos: self.pos
             size: self.size
@@ -27,12 +29,14 @@
             size: 10, self.height
     
     Label:
+        color: (0, (135/255), (130/255), 1)
         font_size: 70  
         center_x: root.width / 4
         top: root.top - 50
         text: str(root.player1.score)
         
     Label:
+        color: ( (199/255),1, (145/255),1)
         font_size: 70  
         center_x: root.width * 3 / 4
         top: root.top - 50
