@@ -65,7 +65,7 @@ class PongGame(Widget):
 
     def update(self, dt):
         self.ball.move()
-        print(self.ball.velocity)
+        #print(self.ball.velocity)
 
         self.player1.Color = (0, (135/255), (130/255), 1) 
         self.player2.Color = ( (199/255),1, (145/255),1)
