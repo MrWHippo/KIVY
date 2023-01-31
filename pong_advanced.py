@@ -5,8 +5,10 @@ from kivy.properties import (
 )
 from kivy.vector import Vector
 from kivy.clock import Clock
-#from kivy.graphics import Color
+from kivy.graphics import Color
 import keyboard
+from random import randint
+from kivy.core.window import Window
 
 
 class PongPaddle(Widget):
@@ -20,27 +22,42 @@ class PongPaddle(Widget):
             offset = (ball.center_y - self.center_y) / (self.height / 2)
             bounced = Vector(-1 * vx, vy)
             vel = bounced * 1.1
-            if vel.x > 12 or vel.x < -12:
+            if vel.x > 10.5 or vel.x < -10.5 or vel.y < -7 or vel.y > 7:
                 vel = bounced
-                print("Limit")
             ball.velocity = vel.x, vel.y + offset
-            print(vel.x, vel.y)
             return True
         else:
             return False
     
-    # moving paddles with keyboard
-    def move_paddles(self, player, ball):
-        if player == 1:
-            if keyboard.is_pressed("w"):
-                self.y += 5
-            if keyboard.is_pressed("s"):
-                self.y -= 5
+    # moving paddles 
+    def move_paddles(self, ball, paddle):
+        window_size = Window.size
+        window_size_x, window_size_y = window_size
+        
+        #paddle 1
+        if paddle == 1:
+            if ball.center_x < window_size_x/2:
+                if ball.center_y > (self.center_y + self.height/2):
+                    self.y += 20
+                elif ball.center_y < (self.center_y - self.height/2):
+                    self.y -= 20
+            else:
+                if window_size_y/2 > self.center_y :
+                    self.y += 15
+                elif window_size_y/2 < self.center_y:
+                    self.y -= 15
+        #paddle 2
         else:
-            if ball.center_y > (self.center_y + self.height/2):
-                self.y += 15
-            elif ball.center_y < (self.center_y - self.height/2):
-                self.y -= 15
+            if ball.center_x > window_size_x/2:
+                if ball.center_y > (self.center_y + self.height/2):
+                    self.y += 20
+                elif ball.center_y < (self.center_y - self.height/2):
+                    self.y -= 20
+            else:
+                if window_size_y/2 > self.center_y:
+                    self.y += 15
+                elif window_size_y/2 < self.center_y:
+                    self.y -= 15
 
 
 class PongBall(Widget):
@@ -59,9 +76,9 @@ class PongGame(Widget):
     player2 = ObjectProperty(None)
     
 
-    def serve_ball(self, vel=(4, 0)):
+    def serve_ball(self):
         self.ball.center = self.center
-        self.ball.velocity = vel
+        self.ball.velocity = Vector(4,0).rotate(randint(-50,50))
 
     def update(self, dt):
         self.ball.move()
@@ -71,8 +88,8 @@ class PongGame(Widget):
         self.player2.Color = ( (199/255),1, (145/255),1)
 
         # keyboard
-        self.player1.move_paddles(1, self.ball)
-        self.player2.move_paddles(2, self.ball)
+        self.player1.move_paddles(self.ball, 1)
+        self.player2.move_paddles(self.ball, 2)
 
         # bounce of paddles
         if self.player1.bounce_ball(self.ball):
@@ -88,12 +105,12 @@ class PongGame(Widget):
         # score
         if (self.ball.x + 25) < self.x:
             self.player2.score += 1
-            self.serve_ball(vel=(4, 0))
+            self.serve_ball()
             #self.ball.Color = (68/255, 214/255, 44/255, 1) 
             
         if (self.ball.right - 25) > self.width:
             self.player1.score += 1
-            self.serve_ball(vel=(-4, 0))
+            self.serve_ball()
             #self.ball.Color = (68/255, 214/255, 44/255, 1) 
 
     # moving paddles with mouse/trackpad
