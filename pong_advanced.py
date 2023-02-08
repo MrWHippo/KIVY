@@ -33,31 +33,32 @@ class PongPaddle(Widget):
     def move_paddles(self, ball, paddle):
         window_size = Window.size
         window_size_x, window_size_y = window_size
+        speed = 40
         
         #paddle 1
         if paddle == 1:
             if ball.center_x < window_size_x/2:
                 if ball.center_y > (self.center_y + self.height/2):
-                    self.y += 20
+                    self.y += speed
                 elif ball.center_y < (self.center_y - self.height/2):
-                    self.y -= 20
+                    self.y -= speed
             else:
                 if window_size_y/2 > self.center_y :
-                    self.y += 15
+                    self.y += speed
                 elif window_size_y/2 < self.center_y:
-                    self.y -= 15
+                    self.y -= speed
         #paddle 2
         else:
             if ball.center_x > window_size_x/2:
                 if ball.center_y > (self.center_y + self.height/2):
-                    self.y += 20
+                    self.y += speed
                 elif ball.center_y < (self.center_y - self.height/2):
-                    self.y -= 20
+                    self.y -= speed
             else:
                 if window_size_y/2 > self.center_y:
-                    self.y += 15
+                    self.y += speed
                 elif window_size_y/2 < self.center_y:
-                    self.y -= 15
+                    self.y -= speed
 
 
 class PongBall(Widget):
