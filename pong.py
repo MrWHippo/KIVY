@@ -5,8 +5,8 @@ from kivy.properties import (
 )
 from kivy.vector import Vector
 from kivy.clock import Clock
-#from kivy.graphics import Color
-import keyboard
+from kivy.graphics import Color
+#import keyboard
 
 
 class PongPaddle(Widget):
@@ -32,15 +32,16 @@ class PongPaddle(Widget):
     # moving paddles with keyboard
     def move_paddles(self, player, ball):
         if player == 1:
-            if keyboard.is_pressed("w"):
-                self.y += 5
-            if keyboard.is_pressed("s"):
-                self.y -= 5
+            #if keyboard.is_pressed("w"):
+                #self.y += 5
+            #if keyboard.is_pressed("s"):
+                #self.y -= 5
+            pass
         else:
-            if ball.center_y > (self.center_y + self.height/2):
-                self.y += 15
-            elif ball.center_y < (self.center_y - self.height/2):
-                self.y -= 15
+            if keyboard.is_pressed("up"):
+                self.y += 5
+            if keyboard.is_pressed("down"):
+                self.y -= 5
 
 
 class PongBall(Widget):
